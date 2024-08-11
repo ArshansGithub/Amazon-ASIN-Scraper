@@ -27,7 +27,7 @@ async def make_request(client, url, headers, retries = 5):
     return response
 
 async def main(session, keyword):
-    
+    keyword = keyword.replace(" ", "+")
     home_url = "https://www.amazon.com"
     home = await make_request(session, home_url, headers)
     print(f"Home - Status Code: {home.status_code}")
@@ -61,8 +61,9 @@ async def main(session, keyword):
 
         print(f"Page {page + 1} done")
 
+    keyword = keyword.replace("+", "_")
     # Save the results
-    with open("asins.json", "w") as file:
+    with open(f"asins_{keyword}.json", "w") as file:
         json.dump(asins, file)
     
 
@@ -76,7 +77,7 @@ async def main(session, keyword):
 if __name__ == '__main__':
     proxies = ["proxy"]
     
-    keyword = "motherboard"
+    keyword = "apple iphone"
 
     session = noble_tls.Session(
         client=Client.FIREFOX_120,
